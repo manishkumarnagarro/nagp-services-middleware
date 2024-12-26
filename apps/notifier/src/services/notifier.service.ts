@@ -3,13 +3,9 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class NotifierService {
-  getHello(): string {
-    return 'Hello World!';
-  }
-
   @RabbitSubscribe({
     exchange: process.env.RABBITMQ_DOCUMENTS_EXCHANGE,
-    queue: process.env.RABBITMQ_STATEMENT_GENERATED_QUEUE,
+    queue: process.env.RABBITMQ_STATEMENT_GENERATED_QUEUE_SERVICE2,
     routingKey: 'documents.statement_generated',
   })
   handleDocumentGenerated(data: any): void {

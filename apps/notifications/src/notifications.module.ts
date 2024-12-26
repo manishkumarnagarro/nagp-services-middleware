@@ -16,6 +16,7 @@ import { AppConfigModule, ExchangeTypes, RabbitMqModule } from '@app/common';
         {
           name: process.env.RABBITMQ_STATEMENT_GENERATED_QUEUE,
           exchange: process.env.RABBITMQ_DOCUMENTS_NOTIFICATIONS_EXCHANGE,
+          routingKey: 'documents.statement_generated',
         },
       ],
     }),

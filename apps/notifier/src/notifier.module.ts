@@ -23,7 +23,7 @@ import { AppConfigModule, ExchangeTypes, RabbitMqModule } from '@app/common';
           routingKey: 'accounts.created',
         },
         {
-          name: process.env.RABBITMQ_STATEMENT_GENERATED_QUEUE,
+          name: process.env.RABBITMQ_STATEMENT_GENERATED_QUEUE_SERVICE2,
           exchange: process.env.RABBITMQ_DOCUMENTS_NOTIFICATIONS_EXCHANGE,
           routingKey: 'documents.statement_generated',
         },
