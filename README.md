@@ -7,8 +7,13 @@ Docker: Please make sure there is docker installed on you machine. This code use
 To start the application follow the below steps/commands.
 
 ```bash
-# development
 $ docker compose up -d
+```
+
+## Stopping the app
+The below command removes all the container and the volumes created for this app.
+```bash
+$ docker compose down -v
 ```
 
 The above command will start belwo docker containers:
@@ -60,3 +65,17 @@ This microservice does not expose any endpoints, it listens to the
 
 - PDF generated event by PDF Generation Service via RabbitMQ
 - account created event from Accounts service, when account is created.
+
+### Seed Data
+There is some seed data available in the folder `apps/accounts/src/init-db` The `accounts-seed` service seeds the DB with this data when the docker containerd are first started.
+
+
+### DB and RabbitMQ accounts
+#### RabbitMQ
+  * username: `accounts_user`
+  * password: `password`
+
+#### MySQL DB
+  * username: `accounts_user`
+  * password: `password`
+  * database name:  `accounts`
