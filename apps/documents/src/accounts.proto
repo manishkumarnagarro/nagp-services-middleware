@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package accounts;
+
+service AccountsService {
+  rpc GetAccountStatement (AccountNumber) returns (AccountStatement) {}
+}
+
+message AccountNumber {
+  string accountNumber = 1;
+}
+
+message Transaction {
+    string id = 1;
+    string type = 3;
+    double amount = 4;
+    string date = 5;
+    string fromAccount = 6;
+    string toAccount = 7;
+    string description = 8;
+    double balance = 9;
+    string mode = 10;
+}
+
+message AccountStatement {
+  string accountNumber = 1;
+  string name = 2;
+  string date = 3;
+  double balance = 4;
+  repeated Transaction transactions = 5;
+}
+

@@ -1,0 +1,114 @@
+services:
+  rabbitmq:
+    image: rabbitmq:4-management # 4-management tag includes the management plugin
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    environment:
+      RABBITMQ_DEFAULT_USER: 'user'
+      RABBITMQ_DEFAULT_PASS: 'password'
+    networks:
+      - app-network
+
+  db:
+    image: mysql:5-debian
+    #args: ["--max_allowed_packet=268435456"]
+    command:
+      - --max_allowed_packet=268435456
+      - --wait-timeout=28800
+    environment:
+      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_DATABASE: 'accounts'
+      MYSQL_USER: 'accounts_user'
+      MYSQL_PASSWORD: 'password'
+    ports:
+      - '3306:3306'
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - app-network
+
+  accounts:
+    develop:
+      watch:
+        - action: rebuild
+          path: /apps/accounts
+    build:
+      context: .
+      dockerfile: /apps/accounts/Dockerfile
+    ports:
+      - '4000:4000'
+      - '4001:4001'
+    env_file:
+      - /.env
+    depends_on:
+      - db
+      - rabbitmq
+    networks:
+      - app-network
+    volumes:
+      - /apps/accounts:/app
+
+  documents:
+    build:
+      context: .
+      dockerfile: /apps/documents/Dockerfile
+    develop:
+      watch:
+        - action: rebuild
+          path: /apps/documents
+    ports:
+      - '5000:5000'
+    env_file:
+      - /.env
+    depends_on:
+      - db
+      - rabbitmq
+    networks:
+      - app-network
+    volumes:
+      - /apps/documents:/app
+
+  notifier:
+    build:
+      context: .
+      dockerfile: /apps/notifier/Dockerfile
+    develop:
+      watch:
+        - action: rebuild
+          path: /apps/notifier
+    ports:
+      - '7000:7000'
+    env_file:
+      - /.env
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+    volumes:
+      - /apps/notifier:/app
+
+  notifications:
+    build:
+      context: .
+      dockerfile: /apps/notifications/Dockerfile
+    develop:
+      watch:
+        - action: rebuild
+          path: /apps/notifications
+    ports:
+      - '6000:6000'
+    env_file:
+      - /.env
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+    volumes:
+      - /apps/notifications:/app
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
